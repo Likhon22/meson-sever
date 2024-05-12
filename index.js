@@ -19,6 +19,7 @@ const client = new MongoClient(uri, {
   },
 });
 const courses = client.db("mesonDB").collection("courses");
+const users = client.db("mesonDB").collection("users");
 
 async function run() {
   try {
@@ -34,6 +35,23 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await courses.findOne(query);
+      res.send(result);
+    });
+
+    // save user
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const result = await users.insertOne(user);
+      res.send(result);
+    });
+    // getting user role
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await users.findOne(query);
+      console.log(result);
       res.send(result);
     });
     // Send a ping to confirm a successful connection
