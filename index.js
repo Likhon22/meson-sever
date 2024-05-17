@@ -25,7 +25,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    app.post("/courses", async (req, res) => {
+      const courseInfo = req.body;
 
+      const result = await courses.insertOne(courseInfo);
+      res.send(result);
+    });
+    // upload video link in courses
+    app.post("/courses/add-video/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const videoInfo = req.body;
+      const result = await courses.updateOne(query, {
+        $push: { content: videoInfo },
+      });
+      if (result.modifiedCount === 1) {
+        res.send(result);
+      }
+    });
     app.get("/courses", async (req, res) => {
       const result = await courses.find().toArray();
       res.send(result);
@@ -66,9 +83,6 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.get("/unique-categories", async (req, res) => [
-  // const category= await
-]);
 app.get("/", async (req, res) => {
   res.send("meson server is running");
 });
