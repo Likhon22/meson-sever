@@ -82,12 +82,12 @@ async function run() {
       console.log(result);
       res.send(result);
     });
-    // app.get("/api/exams/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const query = { _id: new ObjectId(id) };
-    //   const result = await exams.findOne(query);
-    //   res.send(result);
-    // });
+    app.get("/api/exams/get-exam-by-id/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await exams.findOne(query);
+      res.send([result]);
+    });
     app.post("/users", async (req, res) => {
       const user = req.body;
       console.log(user);
